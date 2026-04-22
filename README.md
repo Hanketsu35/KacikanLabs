@@ -1,58 +1,68 @@
 # KacikanLabs
 
-Personal lab for sharing weekly lab material — PDFs, code, datasets, and notes together in one folder flow.
+KacikanLabs is the course lab archive for students.
 
-**Live site:** https://kacikanlabs.pages.dev *(update after deploy)*
+Everything for each lab stays together in one place:
+- PDF
+- code
+- dataset
+- extra files
 
-## Structure
+The archive is organized by year, course, and lab date.
 
+## Live site
+
+https://kacikanlabs.210401043.workers.dev/
+
+## How to use
+
+1. Open the homepage.
+2. Find your year and course.
+3. Open the lab.
+4. Download the files inside that lab.
+
+## Folder flow
+
+Each lab has its own folder, for example:
+
+```text
+assets/2026/CENG113M/LAB1/
 ```
-/
-├── index.html          # Homepage
-├── content.js          # Single source of truth for all lab items
-├── assets/             # Year / course / lab-date folders live here
-├── pdfs/index.html     # Legacy redirect to the unified archive
-├── datasets/index.html # Legacy redirect to the unified archive
-├── snippets/index.html # Legacy redirect to the unified archive
-├── style.css           # Shared styles
-└── .gitignore
-```
 
-## Adding Content
+The files for that lab should stay inside the same folder.
 
-Add new entries in `content.js`. The archive stays compact, and each lab opens a detail view with its files:
+## Adding new lab content
+
+Add a new lab entry in [content.js](content.js).
+
+Example:
 
 ```js
 {
   year: "2026",
-  course: "Machine Learning Lab",
-  labDate: "2026-04-22",
-  title: "Week 01 - Data Setup",
-  description: "Brief description.",
-  tags: ["week-01", "intro"],
+  course: "CENG113M",
+  labDate: "LAB 1",
+  title: "Lab 1",
+  description: "Introductory lab files.",
+  tags: ["intro"],
   assets: [
-    { label: "Lab PDF", kind: "pdf", href: "assets/2026/machine-learning-lab/2026-04-22/lab.pdf" },
-    { label: "Starter Code", kind: "code", href: "assets/2026/machine-learning-lab/2026-04-22/starter.py" },
-    { label: "Dataset", kind: "data", href: "assets/2026/machine-learning-lab/2026-04-22/dataset.csv" },
-  ],
+    { label: "LAB1.pdf", kind: "pdf", href: "assests/2026/CENG113M/LAB1/LAB1.pdf" },
+    { label: "exercise_1_hello_world.py", kind: "code", href: "assests/2026/CENG113M/LAB2/exercise_1_hello_world.py" }
+  ]
 }
 ```
 
-For a new week, create a folder like `assets/2026/machine-learning-lab/2026-04-22/` and add the matching entry once in `content.js`.
+## Live site
 
-## Cloudflare Pages
-
-Yes, JS works on Cloudflare Pages. This project is a static site, so the browser runs the JS directly and Pages just serves the files.
+The site runs on Cloudflare Pages.
 
 ## Deploy
 
-Hosted on **Cloudflare Pages** via GitHub integration. Every push to `main` triggers an automatic deploy.
+This is a static site, so no build command is needed.
 
-### First-time setup
-1. Push this repo to GitHub
-2. Go to [Cloudflare Pages](https://pages.cloudflare.com) → Create project → Connect to Git
-3. Select the repo, set build settings to **none** (static site)
-4. Deploy
+Cloudflare Pages settings:
+- Build command: none
+- Output directory: root
 
 ## License
 
