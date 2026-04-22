@@ -1,3 +1,4 @@
+// KacikanLabs catalog - all course labs organized by year, course, and date
 window.KACIKANLABS_LABS = [
   {
     year: "2026",
