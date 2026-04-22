@@ -479,6 +479,55 @@ a:hover { text-decoration: underline; }
   color: var(--text-muted);
 }
 
+.course-group {
+  margin-bottom: 32px;
+}
+
+.course-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-left: 8px;
+  border-left: 3px solid var(--accent);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.15s;
+}
+
+.course-header:hover {
+  opacity: 0.8;
+}
+
+.toggle-icon {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  color: var(--text-sub);
+}
+
+.course-group.open .toggle-icon {
+  transform: rotate(0deg);
+}
+
+.course-group:not(.open) .toggle-icon {
+  transform: rotate(-90deg);
+}
+
+.course-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.course-header span {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.course-group:not(.open) .lab-list {
+  display: none;
+}
+
 .lab-list {
   display: grid;
   gap: 14px;

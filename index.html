@@ -206,47 +206,73 @@
       emptyEl.style.display = filtered.length ? "none" : "block";
 
       const grouped = filtered.reduce((acc, lab) => {
-        (acc[lab.year] ||= []).push(lab);
+        if (!acc[lab.year]) acc[lab.year] = {};
+        (acc[lab.year][lab.course] ||= []).push(lab);
         return acc;
       }, {});
 
       Object.keys(grouped).sort((a, b) => b.localeCompare(a)).forEach(year => {
-        const section = document.createElement("section");
-        section.className = "year-section";
-        section.innerHTML = `
+        const yearSection = document.createElement("section");
+        yearSection.className = "year-section";
+        yearSection.innerHTML = `
           <div class="year-section-header">
             <h2>${year}</h2>
-            <span>${grouped[year].length} lab</span>
           </div>
-          <div class="lab-list"></div>
+          <div class="course-groups"></div>
         `;
 
-        const list = section.querySelector(".lab-list");
-        grouped[year].sort((a, b) => b.labDate.localeCompare(a.labDate)).forEach(lab => {
-          const card = document.createElement("article");
-          card.className = "lab-card";
-          card.innerHTML = `
-            <div class="lab-card-head">
-              <div>
-                <p class="lab-path">${lab.year} / ${lab.course} / ${lab.labDate}</p>
-                <h3>${lab.title}</h3>
-              </div>
-              <span class="lab-date">${lab.labDate}</span>
+        const courseGroupsContainer = yearSection.querySelector(".course-groups");
+        const courses = grouped[year];
+
+        Object.keys(courses).sort().forEach(course => {
+          const courseGroup = document.createElement("div");
+          courseGroup.className = "course-group";
+          courseGroup.innerHTML = `
+            <div class="course-header" data-toggle="${course}">
+              <svg class="toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+              <h3>${course}</h3>
+              <span>${courses[course].length} lab</span>
             </div>
-            <p class="lab-description">${lab.description}</p>
-            <div class="resource-meta lab-tags">
-              ${(lab.tags || []).map(tag => `<span class="tag">${tag}</span>`).join("")}
-              <span class="meta-chip">${(lab.assets || []).length} files</span>
-            </div>
-            <div class="lab-card-actions">
-              <button class="btn btn-outline lab-open-btn" type="button">Open lab</button>
-            </div>
+            <div class="lab-list"></div>
           `;
-          card.querySelector(".lab-open-btn")?.addEventListener("click", () => openLab(lab));
-          list.appendChild(card);
+
+          const header = courseGroup.querySelector(".course-header");
+          const list = courseGroup.querySelector(".lab-list");
+
+          header.addEventListener("click", () => {
+            courseGroup.classList.toggle("open");
+          });
+
+          courses[course].sort((a, b) => b.labDate.localeCompare(a.labDate)).forEach(lab => {
+            const card = document.createElement("article");
+            card.className = "lab-card";
+            card.innerHTML = `
+              <div class="lab-card-head">
+                <div>
+                  <p class="lab-path">${lab.year} / ${lab.course} / ${lab.labDate}</p>
+                  <h3>${lab.title}</h3>
+                </div>
+                <span class="lab-date">${lab.labDate}</span>
+              </div>
+              <p class="lab-description">${lab.description}</p>
+              <div class="resource-meta lab-tags">
+                ${(lab.tags || []).map(tag => `<span class="tag">${tag}</span>`).join("")}
+                <span class="meta-chip">${(lab.assets || []).length} files</span>
+              </div>
+              <div class="lab-card-actions">
+                <button class="btn btn-outline lab-open-btn" type="button">Open lab</button>
+              </div>
+            `;
+            card.querySelector(".lab-open-btn")?.addEventListener("click", () => openLab(lab));
+            list.appendChild(card);
+          });
+
+          courseGroupsContainer.appendChild(courseGroup);
         });
 
-        yearGroupsEl.appendChild(section);
+        yearGroupsEl.appendChild(yearSection);
       });
     }
 
