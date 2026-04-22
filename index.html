@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KacikanLabs</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+        <span>KacikanLabs</span>
+      </a>
+      <nav class="nav">
+        <a href="#archive">Archive</a>
+        <a href="https://github.com/Hanketsu35" target="_blank" rel="noreferrer" class="nav-gh">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero hero-labs">
+    <div class="container hero-shell">
+      <div>
+        <h1 class="hero-title">Lab Arşivi</h1>
+        <p class="hero-sub">Geçtiğimiz lab dokümanlarını kolayca bulabilirsin.</p>
+      </div>
+      <div class="hero-panel">
+        <div class="hero-panel-label">Klasör düzeni</div>
+        <div class="hero-panel-path">assets / 2026 / machine-learning-lab / 2026-04-22 /</div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container archive" id="archive">
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search" placeholder="Search year, course, lab date, title..." />
+      </div>
+      <div class="tag-filters" id="tag-filters"></div>
+    </div>
+
+    <div id="year-groups"></div>
+    <p class="empty-state" id="empty-state" style="display:none">No labs found.</p>
+  </main>
+
+  <main class="container lab-detail" id="lab-detail" style="display:none"></main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 KacikanLabs · <a href="https://github.com/Hanketsu35" target="_blank" rel="noreferrer">Hanketsu35</a></span>
+    </div>
+  </footer>
+
+  <script src="content.js"></script>
+  <script>
+    const labs = window.KACIKANLABS_LABS || [];
+    const searchEl = document.getElementById("search");
+    const tagsEl = document.getElementById("tag-filters");
+    const yearGroupsEl = document.getElementById("year-groups");
+    const emptyEl = document.getElementById("empty-state");
+    const archiveEl = document.getElementById("archive");
+    const detailEl = document.getElementById("lab-detail");
+
+    function slugify(value) {
+      return String(value)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function getLabId(lab) {
+      return `${lab.year}-${lab.labDate}-${slugify(lab.course)}`;
+    }
+
+    function getSelectedLab() {
+      const params = new URLSearchParams(window.location.search);
+      const labId = params.get("lab");
+      return labs.find(lab => getLabId(lab) === labId) || null;
+    }
+
+    const allTags = [...new Set(labs.flatMap(lab => lab.tags || []))];
+    const allYears = [...new Set(labs.map(lab => lab.year))].sort((a, b) => b.localeCompare(a));
+    let activeTag = null;
+    let activeYear = null;
+
+    allYears.forEach(year => {
+      const btn = document.createElement("button");
+      btn.className = "tag-btn";
+      btn.textContent = year;
+      btn.onclick = () => {
+        activeYear = activeYear === year ? null : year;
+        syncActiveButtons();
+        render();
+      };
+      tagsEl.appendChild(btn);
+    });
+
+    allTags.forEach(tag => {
+      const btn = document.createElement("button");
+      btn.className = "tag-btn";
+      btn.textContent = tag;
+      btn.onclick = () => {
+        activeTag = activeTag === tag ? null : tag;
+        syncActiveButtons();
+        render();
+      };
+      tagsEl.appendChild(btn);
+    });
+
+    function openLab(lab) {
+      const params = new URLSearchParams(window.location.search);
+      params.set("lab", getLabId(lab));
+      history.pushState({}, "", `${window.location.pathname}?${params.toString()}`);
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function closeLab() {
+      const params = new URLSearchParams(window.location.search);
+      params.delete("lab");
+      const next = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname;
+      history.pushState({}, "", next);
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function syncActiveButtons() {
+      document.querySelectorAll(".tag-btn").forEach(button => {
+        button.classList.remove("active");
+        if (button.textContent === activeYear || button.textContent === activeTag) {
+          button.classList.add("active");
+        }
+      });
+    }
+
+    function matchesSearch(lab, query) {
+      if (!query) return true;
+      const haystack = [lab.year, lab.course, lab.labDate, lab.title, lab.description, ...(lab.tags || [])].join(" ").toLowerCase();
+      return haystack.includes(query);
+    }
+
+    function render() {
+      const selectedLab = getSelectedLab();
+      const showingDetail = Boolean(selectedLab);
+      archiveEl.style.display = showingDetail ? "none" : "block";
+      detailEl.style.display = showingDetail ? "block" : "none";
+
+      if (showingDetail) {
+        searchEl.value = searchEl.value;
+        detailEl.innerHTML = `
+          <section class="detail-shell">
+            <div class="detail-head">
+              <a href="/" class="back-link" data-close-lab>← Back to archive</a>
+              <div class="detail-kicker">${selectedLab.year} / ${selectedLab.course}</div>
+              <h2>${selectedLab.title}</h2>
+              <p class="detail-meta">${selectedLab.labDate} · ${selectedLab.description}</p>
+              <div class="detail-tags">
+                ${(selectedLab.tags || []).map(tag => `<span class="tag">${tag}</span>`).join("")}
+              </div>
+            </div>
+            <div class="detail-assets">
+              <div class="detail-assets-header">
+                <h3>Files in this lab</h3>
+                <span>${(selectedLab.assets || []).length} file</span>
+              </div>
+              <div class="detail-asset-grid">
+                ${(selectedLab.assets || []).map(asset => `
+                  <a class="asset-chip asset-${asset.kind}" href="${asset.href}" target="_blank" rel="noreferrer">
+                    <span>${asset.kind}</span>
+                    <strong>${asset.label}</strong>
+                    <small>${asset.href}</small>
+                  </a>
+                `).join("")}
+              </div>
+            </div>
+          </section>
+        `;
+        detailEl.querySelector("[data-close-lab]")?.addEventListener("click", event => {
+          event.preventDefault();
+          closeLab();
+        });
+        return;
+      }
+
+      const query = searchEl.value.trim().toLowerCase();
+      const filtered = labs.filter(lab => {
+        const yearOk = !activeYear || lab.year === activeYear;
+        const tagOk = !activeTag || (lab.tags || []).includes(activeTag);
+        return yearOk && tagOk && matchesSearch(lab, query);
+      });
+
+      yearGroupsEl.innerHTML = "";
+      emptyEl.style.display = filtered.length ? "none" : "block";
+
+      const grouped = filtered.reduce((acc, lab) => {
+        (acc[lab.year] ||= []).push(lab);
+        return acc;
+      }, {});
+
+      Object.keys(grouped).sort((a, b) => b.localeCompare(a)).forEach(year => {
+        const section = document.createElement("section");
+        section.className = "year-section";
+        section.innerHTML = `
+          <div class="year-section-header">
+            <h2>${year}</h2>
+            <span>${grouped[year].length} lab</span>
+          </div>
+          <div class="lab-list"></div>
+        `;
+
+        const list = section.querySelector(".lab-list");
+        grouped[year].sort((a, b) => b.labDate.localeCompare(a.labDate)).forEach(lab => {
+          const card = document.createElement("article");
+          card.className = "lab-card";
+          card.innerHTML = `
+            <div class="lab-card-head">
+              <div>
+                <p class="lab-path">${lab.year} / ${lab.course} / ${lab.labDate}</p>
+                <h3>${lab.title}</h3>
+              </div>
+              <span class="lab-date">${lab.labDate}</span>
+            </div>
+            <p class="lab-description">${lab.description}</p>
+            <div class="resource-meta lab-tags">
+              ${(lab.tags || []).map(tag => `<span class="tag">${tag}</span>`).join("")}
+              <span class="meta-chip">${(lab.assets || []).length} files</span>
+            </div>
+            <div class="lab-card-actions">
+              <button class="btn btn-outline lab-open-btn" type="button">Open lab</button>
+            </div>
+          `;
+          card.querySelector(".lab-open-btn")?.addEventListener("click", () => openLab(lab));
+          list.appendChild(card);
+        });
+
+        yearGroupsEl.appendChild(section);
+      });
+    }
+
+    searchEl.addEventListener("input", render);
+    window.addEventListener("popstate", render);
+    render();
+  </script>
+</body>
+</html>
