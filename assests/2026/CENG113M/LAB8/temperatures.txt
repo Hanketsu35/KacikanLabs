@@ -1,0 +1,8 @@
+Istanbul:28
+Ankara:31
+Izmir:35
+Bursa:27
+Antalya:38
+Konya:33
+Trabzon:22
+Erzurum:18

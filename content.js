@@ -89,11 +89,25 @@ window.KACIKANLABS_LABS = [
     course: "CENG113M",
     labDate: "LAB 7",
     title: "Lab 7",
-    description: "Final Lab 7 practice files.",
+    description: "Midterm Lab 7 practice files.",
     tags: ["python"],
     assets: [
       { label: "q2.py", kind: "code", href: "assests/2026/CENG113M/LAB7/q2.py" },
       { label: "q4.py", kind: "code", href: "assests/2026/CENG113M/LAB7/q4.py" },
+    ],
+  },
+  {
+    year: "2026",
+    course: "CENG113M",
+    labDate: "LAB 8",
+    title: "Lab 8",
+    description: "Lab 8 standard library exercises.",
+    tags: ["python","standard library"],
+    assets: [
+      { label: "scores.txt", kind: "data", href: "assests/2026/CENG113M/LAB8/scores.txt" },
+      { label: "server_log.txt", kind: "data", href: "assests/2026/CENG113M/LAB8/server_log.txt" },
+      { label: "temperatures.txt", kind: "data", href: "assests/2026/CENG113M/LAB8/temperatures.txt" },
+      { label: "words.txt", kind: "data", href: "assests/2026/CENG113M/LAB8/words.txt" },
     ],
   },
 ];
