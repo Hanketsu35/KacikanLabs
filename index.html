@@ -179,7 +179,7 @@
               </div>
               <div class="detail-asset-grid">
                 ${(selectedLab.assets || []).map(asset => `
-                  <a class="asset-chip asset-${asset.kind}" href="${asset.href}" target="_blank" rel="noreferrer">
+                  <a class="asset-chip asset-${asset.kind}" href="${asset.href}" ${asset.label.toLowerCase().endsWith(".txt") ? "download" : 'target="_blank" rel="noreferrer"'}>
                     <span>${asset.kind}</span>
                     <strong>${asset.label}</strong>
                     <small>${asset.href}</small>
