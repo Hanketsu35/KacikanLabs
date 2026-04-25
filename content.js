@@ -108,6 +108,7 @@ window.KACIKANLABS_LABS = [
       { label: "server_log.txt", kind: "data", href: "assests/2026/CENG113M/LAB8/server_log.txt" },
       { label: "temperatures.txt", kind: "data", href: "assests/2026/CENG113M/LAB8/temperatures.txt" },
       { label: "words.txt", kind: "data", href: "assests/2026/CENG113M/LAB8/words.txt" },
+      { label: "lab8_solutions.py", kind: "code", href: "assests/2026/CENG113M/LAB8/lab8_solutions.py" },
     ],
   },
 ];
