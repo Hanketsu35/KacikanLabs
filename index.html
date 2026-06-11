@@ -86,6 +86,11 @@
       return `${lab.year}-${lab.labDate}-${slugify(lab.course)}`;
     }
 
+    function getLabNumber(lab) {
+      const match = String(lab.labDate || "").match(/\d+/);
+      return match ? Number(match[0]) : 0;
+    }
+
     function getSelectedLab() {
       const params = new URLSearchParams(window.location.search);
       const labId = params.get("lab");
@@ -246,7 +251,7 @@
             courseGroup.classList.toggle("open");
           });
 
-          courses[course].sort((a, b) => b.labDate.localeCompare(a.labDate)).forEach(lab => {
+          courses[course].sort((a, b) => getLabNumber(b) - getLabNumber(a)).forEach(lab => {
             const card = document.createElement("article");
             card.className = "lab-card";
             card.innerHTML = `
