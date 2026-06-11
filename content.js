@@ -111,4 +111,38 @@ window.KACIKANLABS_LABS = [
       { label: "lab8_solutions.py", kind: "code", href: "assests/2026/CENG113M/LAB8/lab8_solutions.py" },
     ],
   },
+  {
+    year: "2026",
+    course: "CENG113M",
+    labDate: "LAB 10",
+    title: "Lab 10",
+    description: "Lab 10 slides and practice code for CENG113M.",
+    tags: ["python", "slides"],
+    assets: [
+      { label: "CENG113M_LABS.pdf", kind: "pdf", href: "assests/2026/CENG113M/LAB10/CENG113M_LABS.pdf" },
+      { label: "LAB10.py", kind: "code", href: "assests/2026/CENG113M/LAB10/LAB10.py" },
+    ],
+  },
+  {
+    year: "2026",
+    course: "CENG113M",
+    labDate: "LAB 11",
+    title: "Lab 11",
+    description: "Lab 11 presentation file for CENG113M.",
+    tags: ["slides"],
+    assets: [
+      { label: "CENG113M_Lab11.pptx", kind: "slides", href: "assests/2026/CENG113M/LAB11/CENG113M_Lab11.pptx" },
+    ],
+  },
+  {
+    year: "2026",
+    course: "CENG113M",
+    labDate: "LAB 12",
+    title: "Lab 12",
+    description: "Mock final exam material for CENG113M.",
+    tags: ["pdf", "exam"],
+    assets: [
+      { label: "MockFinalExam113M.pdf", kind: "pdf", href: "assests/2026/CENG113M/LAB12/MockFinalExam113M.pdf" },
+    ],
+  },
 ];
